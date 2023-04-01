@@ -6,6 +6,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import Login from './pages/Login';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,6 +15,7 @@ root.render(
       <Nav />
       <Routes>
         <Route exact path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
     </Router>
