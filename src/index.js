@@ -2,16 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
+import Home from './pages/Home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router>
       <Nav />
-      <Routes></Routes>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+      </Routes>
       <Footer />
     </Router>
   </React.StrictMode>
