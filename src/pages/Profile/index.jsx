@@ -1,13 +1,28 @@
+import { useDispatch, useSelector } from 'react-redux';
 import './index.css';
+import { selectAuth, selectProfile } from '../../utils/selectors';
+import { useEffect } from 'react';
+import { fetchOrUpdateProfile } from '../../features/profile';
 
 const Profile = () => {
+  const auth = useSelector(selectAuth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchOrUpdateProfile(auth.data?.body.token));
+  }, [auth, dispatch]);
+
+  const profileData = useSelector(selectProfile).data?.body ?? {};
+
+  const { firstName, lastName } = profileData;
+  
   return (
     <main className="main bg-dark">
       <div className="header">
         <h1>
           Welcome back
           <br />
-          Tony Jarvis!
+          {`${firstName} ${lastName}!`}
         </h1>
         <button className="edit-button">Edit Name</button>
       </div>

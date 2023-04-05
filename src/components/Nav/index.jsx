@@ -18,12 +18,12 @@ const Nav = () => {
       <div>
         {auth.data?.status === 200 ? (
           <div>
-            <Link class="main-nav-item" to="/profile">
-              <i class="fa fa-user-circle"></i>
+            <Link className="main-nav-item" to="/profile">
+              <i className="fa fa-user-circle"></i>
               Tony
             </Link>
-            <div onClick={() => dispatch(authActions.logout())} class="main-nav-item">
-              <i class="fa fa-sign-out"></i>
+            <div onClick={() => dispatch(authActions.logout())} className="main-nav-item">
+              <i className="fa fa-sign-out"></i>
               Sign Out
             </div>
           </div>
