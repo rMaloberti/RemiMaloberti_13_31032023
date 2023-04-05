@@ -31,6 +31,14 @@
   margin-left: 0.25rem;
 }
 
+.error {
+  font-size: 0.75em;
+  font-weight: 700;
+  color: white;
+  background-color: red;
+  padding: .25em;
+}
+
 .input-wrapper {
   display: flex;
   flex-direction: column;
@@ -45,4 +53,12 @@
 .input-wrapper input {
   padding: 5px;
   font-size: 1.2rem;
+}
+
+.empty-error {
+  font-size: 0.75em;
+  font-weight: 700;
+  color: red;
+  text-align: center;
+  margin: 0;
 }
