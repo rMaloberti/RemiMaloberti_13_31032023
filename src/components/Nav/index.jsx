@@ -1,10 +1,12 @@
 import argentBankLogo from '../../assets/argentBankLogo.png';
 import { Link } from 'react-router-dom';
 import './index.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectAuth } from '../../utils/selectors';
+import * as authActions from '../../features/auth';
 
 const Nav = () => {
+  const dispatch = useDispatch();
   const auth = useSelector(selectAuth);
 
   return (
@@ -14,13 +16,13 @@ const Nav = () => {
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
       <div>
-        {auth.data?.body.token ? (
+        {auth.data?.status === 200 ? (
           <div>
             <Link class="main-nav-item" to="/profile">
               <i class="fa fa-user-circle"></i>
               Tony
             </Link>
-            <div class="main-nav-item">
+            <div onClick={() => dispatch(authActions.logout())} class="main-nav-item">
               <i class="fa fa-sign-out"></i>
               Sign Out
             </div>
