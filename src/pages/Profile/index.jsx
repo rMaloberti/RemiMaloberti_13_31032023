@@ -1,12 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './index.css';
 import { selectAuth, selectProfile } from '../../utils/selectors';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchOrUpdateProfile } from '../../features/profile';
 
 const Profile = () => {
   const auth = useSelector(selectAuth);
   const dispatch = useDispatch();
+
+  const [editingName, setEditingName] = useState(false);
 
   useEffect(() => {
     dispatch(fetchOrUpdateProfile(auth.data?.body.token));
@@ -15,16 +17,38 @@ const Profile = () => {
   const profileData = useSelector(selectProfile).data?.body ?? {};
 
   const { firstName, lastName } = profileData;
-  
+
   return (
     <main className="main bg-dark">
       <div className="header">
-        <h1>
-          Welcome back
-          <br />
-          {`${firstName} ${lastName}!`}
-        </h1>
-        <button className="edit-button">Edit Name</button>
+        {editingName ? (
+          <h1>Welcome back</h1>
+        ) : (
+          <h1>
+            Welcome back
+            <br />
+            {`${firstName} ${lastName}!`}
+          </h1>
+        )}
+
+        {editingName ? (
+          <div className="edit-section">
+            <div className="edit-section__textfields">
+              <input type="text" className="first-name-input" placeholder={firstName} />
+              <input type="text" className="last-name-input" placeholder={lastName} />
+            </div>
+            <div className="edit-section__buttons">
+              <button className="save-button">Save</button>
+              <button onClick={() => setEditingName(false)} className="cancel-button">
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button onClick={() => setEditingName(true)} className="edit-button">
+            Edit Name
+          </button>
+        )}
       </div>
       <h2 className="sr-only">Accounts</h2>
       <section className="account">
