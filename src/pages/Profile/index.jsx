@@ -1,14 +1,32 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './index.css';
 import { selectAuth, selectProfile } from '../../utils/selectors';
-import { useEffect, useState } from 'react';
-import { fetchOrUpdateProfile } from '../../features/profile';
+import { useEffect, useRef, useState } from 'react';
+import { editProfile, fetchOrUpdateProfile } from '../../features/profile';
 
 const Profile = () => {
   const auth = useSelector(selectAuth);
   const dispatch = useDispatch();
 
+  const firstNameField = useRef(null);
+  const lastNameField = useRef(null);
+
+  const [firstNameValue, setFirstNameValue] = useState('');
+  const [lastNameValue, setLastNameValue] = useState('');
+
   const [editingName, setEditingName] = useState(false);
+
+  const submitForm = () => {
+    if (firstNameValue !== '' && lastNameValue !== '') {
+      const newData = {
+        firstName: firstNameValue,
+        lastName: lastNameValue,
+      };
+
+      dispatch(editProfile(auth.data?.body.token, newData));
+    }
+    setEditingName(false);
+  };
 
   useEffect(() => {
     dispatch(fetchOrUpdateProfile(auth.data?.body.token));
@@ -34,11 +52,31 @@ const Profile = () => {
         {editingName ? (
           <div className="edit-section">
             <div className="edit-section__textfields">
-              <input type="text" className="first-name-input" placeholder={firstName} />
-              <input type="text" className="last-name-input" placeholder={lastName} />
+              <input
+                ref={firstNameField}
+                onChange={() => {
+                  const value = firstNameField.current.value;
+                  setFirstNameValue(value);
+                }}
+                type="text"
+                className="first-name-input"
+                placeholder={firstName}
+              />
+              <input
+                ref={lastNameField}
+                onChange={() => {
+                  const value = lastNameField.current.value;
+                  setLastNameValue(value);
+                }}
+                type="text"
+                className="last-name-input"
+                placeholder={lastName}
+              />
             </div>
             <div className="edit-section__buttons">
-              <button className="save-button">Save</button>
+              <button onClick={submitForm} className="save-button">
+                Save
+              </button>
               <button onClick={() => setEditingName(false)} className="cancel-button">
                 Cancel
               </button>

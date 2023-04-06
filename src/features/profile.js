@@ -79,3 +79,31 @@ export const fetchOrUpdateProfile = (authToken) => {
     }
   };
 };
+
+export const editProfile = (authToken, newData) => {
+  return async (dispatch, getState) => {
+    const status = selectProfile(getState()).status;
+
+    if (status === 'pending' || status === 'updating') {
+      return;
+    }
+
+    dispatch(fetching());
+
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(newData),
+      });
+      const data = await response.json();
+      dispatch(resolved(data));
+    } catch (error) {
+      dispatch(rejected(error));
+    }
+  };
+};
