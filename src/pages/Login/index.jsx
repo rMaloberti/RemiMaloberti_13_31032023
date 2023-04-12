@@ -6,6 +6,7 @@ import { selectAuth } from '../../utils/selectors';
 import { Navigate } from 'react-router';
 
 const Login = () => {
+  /* Get the auth key in the store */
   const auth = useSelector(selectAuth);
 
   const dispatch = useDispatch();
@@ -19,6 +20,10 @@ const Login = () => {
   const [emptyUsernameError, setEmptyUsernameError] = useState(false);
   const [emptyPasswordError, setEmptyPasswordError] = useState(false);
 
+  /**
+   * Dispatch the action with the given text inputs.
+   * @function submitForm
+   */
   const submitForm = () => {
     setEmptyUsernameError(false);
     setEmptyPasswordError(false);
@@ -41,6 +46,7 @@ const Login = () => {
     }
   };
   
+  /* If authentication succeeded, redirect to the profile page. */
   return auth.data?.status === 200 ? (
     <Navigate to="/profile" />
   ) : (

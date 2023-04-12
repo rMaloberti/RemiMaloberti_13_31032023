@@ -7,10 +7,12 @@ const initialState = {
   error: null,
 };
 
+/* Auth feature slice */
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    /* Action: auth/fetching */
     fetching: (draft) => {
       if (draft.status === 'void') {
         draft.status = 'pending';
@@ -27,6 +29,7 @@ const authSlice = createSlice({
       }
       return;
     },
+    /* Action: auth/resolved */
     resolved: (draft, action) => {
       if (draft.status === 'pending' || draft.status === 'updating') {
         draft.data = action.payload;
@@ -35,6 +38,7 @@ const authSlice = createSlice({
       }
       return;
     },
+    /* Action: auth/rejected */
     rejected: (draft, action) => {
       if (draft.status === 'pending' || draft.status === 'updating') {
         draft.error = action.payload;
@@ -44,6 +48,7 @@ const authSlice = createSlice({
       }
       return;
     },
+    /* Action: auth/logout */
     logout: (draft) => {
       draft.status = 'void';
       draft.data = null;
@@ -59,6 +64,13 @@ export const { fetching, resolved, rejected, logout } = actions;
 
 export default reducer;
 
+/**
+ * Async function to send a POST request to the API to validate user credentials and log him in.
+ * @function login
+ * 
+ * @param {object} credentials The user's credentials.
+ * @returns {void} Returns void if a request is already running.
+ */
 export const login = (credentials) => {
   return async (dispatch, getState) => {
     const status = selectAuth(getState()).status;

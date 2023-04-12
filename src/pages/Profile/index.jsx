@@ -1,13 +1,40 @@
 import { useDispatch, useSelector } from 'react-redux';
 import './index.css';
 import { selectAuth, selectProfile } from '../../utils/selectors';
-import { useEffect } from 'react';
-import { fetchOrUpdateProfile } from '../../features/profile';
+import { useEffect, useRef, useState } from 'react';
+import { editProfile, fetchOrUpdateProfile } from '../../features/profile';
 
 const Profile = () => {
+  /* Get the auth key in the store */
   const auth = useSelector(selectAuth);
+
   const dispatch = useDispatch();
 
+  const firstNameField = useRef(null);
+  const lastNameField = useRef(null);
+
+  const [firstNameValue, setFirstNameValue] = useState('');
+  const [lastNameValue, setLastNameValue] = useState('');
+
+  const [editingName, setEditingName] = useState(false);
+
+  /**
+   * Validate the form and dispatch the edit profile action.
+   * @function submitForm
+   */
+  const submitForm = () => {
+    if (firstNameValue !== '' && lastNameValue !== '') {
+      const newData = {
+        firstName: firstNameValue,
+        lastName: lastNameValue,
+      };
+
+      dispatch(editProfile(auth.data?.body.token, newData));
+    }
+    setEditingName(false);
+  };
+
+  /* Dispatch fetch action to get the profile data in the sotre */
   useEffect(() => {
     dispatch(fetchOrUpdateProfile(auth.data?.body.token));
   }, [auth, dispatch]);
@@ -15,16 +42,58 @@ const Profile = () => {
   const profileData = useSelector(selectProfile).data?.body ?? {};
 
   const { firstName, lastName } = profileData;
-  
+
   return (
     <main className="main bg-dark">
       <div className="header">
-        <h1>
-          Welcome back
-          <br />
-          {`${firstName} ${lastName}!`}
-        </h1>
-        <button className="edit-button">Edit Name</button>
+        {editingName ? (
+          <h1>Welcome back</h1>
+        ) : (
+          <h1>
+            Welcome back
+            <br />
+            {`${firstName} ${lastName}!`}
+          </h1>
+        )}
+
+        {editingName ? (
+          <div className="edit-section">
+            <div className="edit-section__textfields">
+              <input
+                ref={firstNameField}
+                onChange={() => {
+                  const value = firstNameField.current.value;
+                  setFirstNameValue(value);
+                }}
+                type="text"
+                className="first-name-input"
+                placeholder={firstName}
+              />
+              <input
+                ref={lastNameField}
+                onChange={() => {
+                  const value = lastNameField.current.value;
+                  setLastNameValue(value);
+                }}
+                type="text"
+                className="last-name-input"
+                placeholder={lastName}
+              />
+            </div>
+            <div className="edit-section__buttons">
+              <button onClick={submitForm} className="save-button">
+                Save
+              </button>
+              <button onClick={() => setEditingName(false)} className="cancel-button">
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button onClick={() => setEditingName(true)} className="edit-button">
+            Edit Name
+          </button>
+        )}
       </div>
       <h2 className="sr-only">Accounts</h2>
       <section className="account">
