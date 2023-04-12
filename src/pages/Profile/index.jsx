@@ -5,7 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import { editProfile, fetchOrUpdateProfile } from '../../features/profile';
 
 const Profile = () => {
+  /* Get the auth key in the store */
   const auth = useSelector(selectAuth);
+
   const dispatch = useDispatch();
 
   const firstNameField = useRef(null);
@@ -16,6 +18,10 @@ const Profile = () => {
 
   const [editingName, setEditingName] = useState(false);
 
+  /**
+   * Validate the form and dispatch the edit profile action.
+   * @function submitForm
+   */
   const submitForm = () => {
     if (firstNameValue !== '' && lastNameValue !== '') {
       const newData = {
@@ -28,6 +34,7 @@ const Profile = () => {
     setEditingName(false);
   };
 
+  /* Dispatch fetch action to get the profile data in the sotre */
   useEffect(() => {
     dispatch(fetchOrUpdateProfile(auth.data?.body.token));
   }, [auth, dispatch]);

@@ -7,10 +7,12 @@ const initialState = {
   error: null,
 };
 
+/* Profile feature slice */
 const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {
+    /* Action: profile/fetching */
     fetching: (draft) => {
       if (draft.status === 'void') {
         draft.status = 'pending';
@@ -27,6 +29,7 @@ const profileSlice = createSlice({
       }
       return;
     },
+    /* Action: profile/resolved */
     resolved: (draft, action) => {
       if (draft.status === 'pending' || draft.status === 'updating') {
         draft.data = action.payload;
@@ -35,6 +38,7 @@ const profileSlice = createSlice({
       }
       return;
     },
+    /* Action: profile/rejected */
     rejected: (draft, action) => {
       if (draft.status === 'pending' || draft.status === 'updating') {
         draft.error = action.payload;
@@ -53,6 +57,13 @@ export const { fetching, resolved, rejected } = actions;
 
 export default reducer;
 
+/**
+ * Async function to send a POST request to the API to get the profile data.
+ * @function fetchOrUpdateProfile
+ * 
+ * @param {string} authToken The authentication token stored in the auth store.
+ * @returns {void} Returns void if a request is already running.
+ */
 export const fetchOrUpdateProfile = (authToken) => {
   return async (dispatch, getState) => {
     const status = selectProfile(getState()).status;
@@ -80,6 +91,14 @@ export const fetchOrUpdateProfile = (authToken) => {
   };
 };
 
+/**
+ * Async function to send a PUT request to the API to edit the profile data.
+ * @function editProfile
+ * 
+ * @param {string} authToken The authentication token stored in the auth store.
+ * @param {object} newData The new first and last names entered by the user.
+ * @returns {void} Returns void if a request is already running.
+ */
 export const editProfile = (authToken, newData) => {
   return async (dispatch, getState) => {
     const status = selectProfile(getState()).status;

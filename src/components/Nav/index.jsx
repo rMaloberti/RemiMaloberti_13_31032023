@@ -6,8 +6,10 @@ import { selectAuth } from '../../utils/selectors';
 import * as authActions from '../../features/auth';
 
 const Nav = () => {
-  const dispatch = useDispatch();
+  /* Get the auth key in the store */
   const auth = useSelector(selectAuth);
+
+  const dispatch = useDispatch();
 
   return (
     <nav className="main-nav">
